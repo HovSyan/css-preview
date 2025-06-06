@@ -1,5 +1,6 @@
 {
   "name": "css-preview",
+  "publisher": "hsam",
   "displayName": "css-preview",
   "description": "",
   "version": "0.0.1",
@@ -9,15 +10,12 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:css"
+  ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "css-preview.helloWorld",
-        "title": "Hello World"
-      }
-    ]
+    "commands": []
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

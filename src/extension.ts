@@ -1,26 +1,42 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
+// TODO: make separate panel handler
+let panel = null as null | vscode.WebviewPanel;
+
+// TODO: utilize context argument
 export function activate(context: vscode.ExtensionContext) {
+    const update = (styles: string) => {
+        if (!panel) {
+            panel = vscode.window.createWebviewPanel("css", "Preview", {
+                viewColumn: vscode.ViewColumn.Beside,
+                preserveFocus: true,
+            }, { enableScripts: true });
+            panel.onDidDispose(() => (panel = null));
+        }
+        // TODO: move to separate function/module
+        panel.webview.html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>${styles}</style>
+</head>
+<body>Hello World</body>
+</html>
+`;
+    };
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "css-preview" is now active!');
+    vscode.workspace.onDidChangeTextDocument((e) => {
+        update(e.document.getText());
+    });
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('css-preview.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from css-preview!');
-	});
+    vscode.window.onDidChangeActiveTextEditor((e) => {
+        // TODO: no constant literals
+        e && e.document.languageId === "css"
+            ? update(e.document.getText())
+            : panel?.dispose();
+    });
 
-	context.subscriptions.push(disposable);
+    // TODO: move to init logic
+    update(vscode.window.activeTextEditor?.document.getText() || "");
 }
-
-// This method is called when your extension is deactivated
-export function deactivate() {}
