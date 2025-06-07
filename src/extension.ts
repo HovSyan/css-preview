@@ -7,7 +7,13 @@ let panel = null as null | vscode.WebviewPanel;
 
 // TODO: utilize context argument
 export function activate(context: vscode.ExtensionContext) {
-    const update = (styles: string) => {
+    // TODO: optimize not to change if no change + debounce + post message
+    const update = (editor: vscode.TextEditor) => {
+        const offset = editor.document.offsetAt(editor.selection.active);
+        const stylesheet = cssService.parseStylesheet(editor.document as any) as Stylesheet;
+        const { selectors, declarations } = stylesheet.children.find((r) => r.offset <= offset && offset <= r.end)!;
+        const selectorsStr = stylesheet.textProvider(selectors.offset, selectors.length).replaceAll('\n', ' ');
+        const declarationsStr = stylesheet.textProvider(declarations.offset, declarations.length);
         if (!panel) {
             panel = vscode.window.createWebviewPanel("css", "Preview", {
                 viewColumn: vscode.ViewColumn.Beside,
@@ -21,24 +27,34 @@ export function activate(context: vscode.ExtensionContext) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <style>${styles}</style>
+    <style>
+        [data-host] ${declarationsStr};
+    </style>
 </head>
-<body>Hello World</body>
+<body>
+    <div>Selectors: ${selectorsStr}</div>
+    <div>Declarations: ${declarationsStr}</div>
+    <div>
+        <div data-host>
+            Lorem ipsum
+        <div>
+    </div>
+</body>
 </html>
 `;
     };
 
-    vscode.workspace.onDidChangeTextDocument((e) => {
-        update(e.document.getText());
+    vscode.window.onDidChangeTextEditorSelection((e) => {
+        update(e.textEditor);
     });
 
     vscode.window.onDidChangeActiveTextEditor((e) => {
         // TODO: no constant literals
         e && e.document.languageId === "css"
-            ? update(e.document.getText())
+            ? update(e)
             : panel?.dispose();
     });
 
     // TODO: move to init logic
-    update(vscode.window.activeTextEditor?.document.getText() || "");
+    update(vscode.window.activeTextEditor!);
 }
