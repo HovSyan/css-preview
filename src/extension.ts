@@ -1,5 +1,7 @@
+import { getCSSLanguageService } from 'vscode-css-languageservice';
 import * as vscode from "vscode";
 
+const cssService = getCSSLanguageService();
 // TODO: make separate panel handler
 let panel = null as null | vscode.WebviewPanel;
 
