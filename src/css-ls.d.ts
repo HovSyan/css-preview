@@ -5,7 +5,7 @@ type Position = {
 }
 
 declare type Stylesheet = Position & {
-    children: RuleSet[];
+    children?: RuleSet[];
     parent: null;
     textProvider: (offset?: number, length?: number) => string;
     type: number;
