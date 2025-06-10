@@ -1,14 +1,13 @@
 import { UpdateMessage } from "./html";
 
-export const toUpdateMessage = (docText: string, rule: RuleSet): UpdateMessage => {
-    const { selectors, declarations } =  rule;
+export const toUpdateMessage = (docText: string, rule: RuleSet | undefined): UpdateMessage => {
     return { 
         type: 'hsam_update', 
         value: {
             docText,
-            active: { 
-                selectors: [selectors.offset, selectors.offset + selectors.length], 
-                declarations: [declarations.offset, declarations.offset + declarations.length]
+            active: rule && { 
+                selectors: [rule.selectors.offset, rule.selectors.offset + rule.selectors.length], 
+                declarations: [rule.declarations.offset, rule.declarations.offset + rule.declarations.length]
             }
         }
     };

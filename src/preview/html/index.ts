@@ -2,7 +2,7 @@ export type UpdateMessage = {
     type: `hsam_update`;
     value: {
         docText: string;
-        active: {
+        active?: {
             selectors: [number, number];
             declarations: [number, number];
         }
@@ -23,17 +23,24 @@ function script() {
         return !!e && typeof e === 'object' && 'type' in e && typeof e.type === 'string' && e.type.startsWith(HSAM_PREFIX);
     }
 
-    function update({ value: { active: { selectors, declarations }, docText } }: UpdateMessage) {
+    function update({ value: { active, docText } }: UpdateMessage) {
         window.document.getElementById(USER_STYLES)!.textContent = `#${PREVIEW} { ${docText} }`;
-        window.document.getElementById(USER_SELECTORS)!.replaceChildren(
-            ...docText.substring(selectors[0], selectors[1]).split(',').map((s) => {
-                const node = document.createElement('span');
-                node.className = 'selector';
-                node.textContent = s.trim();
-                return node;
-            })
-        );
-        window.document.getElementById(ACTIVE_STYLES)!.textContent = `#${TARGET} ${docText.substring(declarations[0], declarations[1])}`;
+        if (active) {
+            const { selectors, declarations } = active;
+            window.document.getElementById(USER_SELECTORS)!.replaceChildren(
+                ...docText.substring(selectors[0], selectors[1]).split(',').map((s) => {
+                    const node = document.createElement('span');
+                    node.className = 'selector';
+                    node.textContent = s.trim();
+                    return node;
+                })
+            );
+            window.document.getElementById(ACTIVE_STYLES)!.textContent = `#${TARGET} ${docText.substring(declarations[0], declarations[1])}`;
+        } else {
+            window.document.getElementById(USER_SELECTORS)!.replaceChildren();
+            window.document.getElementById(ACTIVE_STYLES)!.textContent = '';
+        }
+
     }
 
     window.addEventListener('message', (e) => {
@@ -73,6 +80,7 @@ export default `
         align-items: center;
         padding: 16px;
         gap: 10px;
+        min-height: 30px;
         border-bottom: 1px solid currentColor;
 
         .selectors-container__label {

@@ -6,19 +6,11 @@ import { INPUT_DEBOUNCE_TIME } from "../constants";
 
 export class Preview {
     private _panel = null as null | vscode.WebviewPanel;
-    private _prevDocText = "";
 
     update = debounce((editor: vscode.TextEditor) => {
         const docText = editor.document.getText();
-        if (this._prevDocText === docText) {
-            return;
-        }
-        this._prevDocText = docText;
         const rule = getRuleUnderCursor(editor);
-        if (!rule) {
-            return;
-        }
-        this._getOrCreatePanel()?.webview.postMessage(
+        this._getOrCreatePanel().webview.postMessage(
             toUpdateMessage(docText, rule)
         );
     }, INPUT_DEBOUNCE_TIME);
@@ -34,19 +26,19 @@ export class Preview {
     };
 
     private _getOrCreatePanel = () => {
-        if (this._panel) {
-            return this._panel;
+        if (!this._panel) {
+            this._panel = vscode.window.createWebviewPanel(
+                "css",
+                "Preview",
+                {
+                    viewColumn: vscode.ViewColumn.Beside,
+                    preserveFocus: true,
+                },
+                { enableScripts: true }
+            );
+            this._panel.onDidDispose(this._onDispose);
+            this._panel.webview.html = html;
         }
-        this._panel = vscode.window.createWebviewPanel(
-            "css",
-            "Preview",
-            {
-                viewColumn: vscode.ViewColumn.Beside,
-                preserveFocus: true,
-            },
-            { enableScripts: true }
-        );
-        this._panel.onDidDispose(this._onDispose);
-        this._panel.webview.html = html;
+        return this._panel;
     };
 }
