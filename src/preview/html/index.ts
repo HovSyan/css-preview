@@ -27,7 +27,7 @@ function script() {
         window.document.getElementById(USER_STYLES)!.textContent = `#${PREVIEW} { ${docText} }`;
         if (active) {
             const { selectors, declarations } = active;
-            window.document.getElementById(USER_SELECTORS)!.replaceChildren(
+                window.document.getElementById(USER_SELECTORS)!.replaceChildren(
                 ...docText.substring(selectors[0], selectors[1]).split(',').map((s) => {
                     const node = document.createElement('span');
                     node.className = 'selector';

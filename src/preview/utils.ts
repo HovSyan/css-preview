@@ -1,6 +1,6 @@
 import { UpdateMessage } from "./html";
 
-export const toUpdateMessage = (docText: string, rule: RuleSet | undefined): UpdateMessage => {
+export const toUpdateMessage = (docText: string, rule: cssls.RuleSet | undefined): UpdateMessage => {
     return { 
         type: 'hsam_update', 
         value: {
