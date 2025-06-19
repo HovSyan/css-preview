@@ -6,10 +6,14 @@ declare namespace cssls {
     }
 
     export type Stylesheet = Position & {
-        children?: RuleSet[];
+        children?: (RuleSet | Use)[];
         parent: null;
         textProvider: (offset?: number, length?: number) => string;
         type: number;
+    }
+
+    export type Use = Position & {
+        type: 78
     }
 
     export type RuleSet = Position & {
@@ -17,7 +21,7 @@ declare namespace cssls {
         declarations: Declarations;
         parent: Stylesheet;
         selectors: NodeList;
-        type: number;
+        type: 3;
     }
 
     export type NodeList = Position & {
@@ -27,9 +31,9 @@ declare namespace cssls {
     }
 
     export type Declarations = Position & {
-        children: Declaration[];
+        children: (Declaration | RuleSet)[];
         parent: RuleSet;
-        type: number;
+        type: 19;
     }
 
     export type Declaration = Position & {

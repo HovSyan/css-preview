@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { CSS_LANG_ID } from "./constants";
+import { SUPPORTED_LANGUAGES } from "./constants";
 import { Preview } from "./preview";
 import { GlobalState } from "./global-state";
 
@@ -21,7 +21,7 @@ export const onExtensionEnabledStateChange = (enabled: boolean) => {
 };
 
 const tryUpdatePreview = (e = vscode.window.activeTextEditor) => {
-    if (GlobalState.extensionEnabled && e && e.document.languageId === CSS_LANG_ID) {
+    if (GlobalState.extensionEnabled && e && SUPPORTED_LANGUAGES.includes(e.document.languageId)) {
         preview.update(e);
     } else {
         preview.close();
