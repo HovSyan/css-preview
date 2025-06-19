@@ -15,7 +15,16 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
-        "commands": []
+        "commands": [
+            {
+                "command": "css-preview.enable",
+                "title": "css-preview: enable"
+            },
+            {
+                "command": "css-preview.disable",
+                "title": "css-preview: disable"
+            }
+        ]
     },
     "repository": {
         "type": "git",
