@@ -1,0 +1,14 @@
+* {
+    background-color: yellow;
+    color: red;
+}
+
+.some-container {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: auto;
+    overflow: auto;
+    background-color: wheat;
+    border-radius: 20px;
+}
