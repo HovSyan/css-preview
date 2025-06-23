@@ -3,7 +3,7 @@
     "publisher": "hsam",
     "displayName": "Atomic CSS Previewer - VS Code Extension (Proof of Concept)",
     "description": "CSS previewer for atomic and self contained css rules",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "engines": {
         "vscode": "^1.100.0"
     },
