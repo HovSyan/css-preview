@@ -5,7 +5,7 @@ A lightweight VSCode extension to preview individual CSS/SCSS class rules in rea
 ⚠️ Note: Due to the cascading nature of CSS, styles influenced by other files/selectors may not be fully represented.
 
 ## Demo
-![Demo gif](https://github.com/HovSyan/css-preview/demo/demo.gif)
+![Demo gif](https://github.com/HovSyan/css-preview/blob/main/demo/demo.gif?raw=true)
 
 ## Features:
 - Parse .css and .scss files
