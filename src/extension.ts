@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import { onActiveEditorChange, onEditorSelectionChange, onExtensionEnabledStateChange, onInit } from "./lifecycle";
 import { COMMANDS } from "./constants";
-import { GlobalState } from "./global-state";
 
 export function activate(context: vscode.ExtensionContext) {
     vscode.window.onDidChangeTextEditorSelection(onEditorSelectionChange);
